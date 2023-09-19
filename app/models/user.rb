@@ -5,11 +5,9 @@ class User < ApplicationRecord
          :rememberable,
          :validatable,
          :confirmable,
-         :trackable
+         :trackable,
+         :jwt_authenticatable,
+         jwt_revocation_strategy: JwtDenylist
 
   validates :email, uniqueness: { case_sensitive: false }
-
-  def staff?
-    type == 'Staff'
-  end
 end

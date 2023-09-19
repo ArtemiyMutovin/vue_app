@@ -33,6 +33,8 @@ gem "bootsnap", require: false
 
 gem 'devise'
 
+gem 'devise-jwt'
+
 # gem "sassc-rails"
 
 # gem "image_processing", "~> 1.2"

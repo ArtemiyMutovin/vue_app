@@ -1,4 +1,7 @@
-import { createApp } from 'vue/dist/vue.esm-bundler';
+import * as Turbo from "@hotwired/turbo";
+Turbo.start();
+import { createApp } from "vue";
+
 
 const app = createApp({
     data() {
