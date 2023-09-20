@@ -1,4 +1,13 @@
 {
   "name": "app",
-  "private": "true"
+  "private": "true",
+  "devDependencies": {
+    "vite": "^4.4.9",
+    "vite-plugin-ruby": "^3.2.2"
+  },
+  "dependencies": {
+    "@hotwired/turbo": "^7.3.0",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "vue": "3.2.33"
+  }
 }

@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  devise_for :staffs, path: :staffs, path_names: { sign_in: :login, sign_out: :logout, sign_up: :signup }
+  devise_for :users, path: :users, path_names: { sign_in: :login, sign_out: :logout, sign_up: :signup }
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  root to: "home#index"
+
+  namespace :staff do
+    resources :home
+  end
 end
