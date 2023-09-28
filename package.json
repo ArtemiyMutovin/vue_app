@@ -2,6 +2,8 @@
   "name": "app",
   "private": "true",
   "devDependencies": {
+    "sass": "^1.68.0",
+    "sass-loader": "^13.3.2",
     "vite": "^4.4.9",
     "vite-plugin-ruby": "^3.2.2"
   },

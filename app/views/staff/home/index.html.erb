@@ -2,6 +2,9 @@
 
 <h1>This page only for Staff!</h1>
 
-<%= link_to 'Sign Up', new_staff_registration_path, class: 'navbar-brand' %>
+<h4><%= link_to "Log out", destroy_staff_session_path,
+                data: {"turbo-method": :delete},
+                class: "btn btn-danger ml-3"%></h4>
 
-<%= link_to 'Sign In', new_staff_session_path, class: 'navbar-brand' %>
+
+

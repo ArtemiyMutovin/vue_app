@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_19_092152) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_24_182746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_092152) do
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
-  create_table "staffs", force: :cascade do |t|
+  create_table "user", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
@@ -54,7 +54,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_092152) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "email", default: "", null: false
+    t.string "fullname"
+    t.string "phone"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
