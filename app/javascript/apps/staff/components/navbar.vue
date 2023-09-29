@@ -2,7 +2,6 @@
   <div>
     <nav class="navbar navbar-light bg-primary">
       <a class="app-name">
-        <img src="gemstone.jpg" width="50" height="50" >
         Vue App
       </a>
     </nav>
@@ -17,9 +16,9 @@ export default {
 
 <style>
 .app-name {
-  color: white;
+  color: blue;
   font-weight: bold;
-  font-style: italic;
+  font-size: 50px;
 }
 </style>
 

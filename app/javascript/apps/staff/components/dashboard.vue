@@ -1,5 +1,5 @@
 <template>
-  <div class="error">Ошибки {{ errors }}</div>
+  <div v-if="errors.length > 0" class="error">Errors {{ errors }}</div>
   <form @submit.prevent="submitForm">
     <h3>Создание клиента</h3>
     <div>
@@ -30,24 +30,18 @@ export default {
   },
   methods: {
     submitForm() {
-      this.fullnameError = "";
-      this.phoneError = "";
-      this.emailError = "";
       this.errors = []
 
       if (this.fullname.length < 5) {
-        this.fullnameError = "Full name should have at least 5 characters";
-        this.errors.push(this.fullnameError)
+        this.errors.push("Full name should have at least 5 characters")
       }
 
       if (!this.phone.match(/^\d+$/)) {
-        this.phoneError = "Phone should only contain digits";
-        this.errors.push(this.phoneError)
+        this.errors.push("Phone should only contain digits")
       }
 
       if (!this.email.match(/^[\w-]+(\.[\w-]+)*@([a-z0-9-]+\.)+[a-z]{2,}$/i)) {
-        this.emailError = "Invalid email format";
-        this.errors.push(this.emailError)
+        this.errors.push("Invalid email format")
       }
     }
   }
