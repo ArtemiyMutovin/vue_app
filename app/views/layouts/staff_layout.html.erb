@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VueApp</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'staff' %>
+
+  </head>
+
+  <main>
+    <div id="staff-app">
+      <%= yield %>
+    </div>
+  </main>
+</html>
