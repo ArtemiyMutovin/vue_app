@@ -1,59 +1,61 @@
 <template>
-  <form id="userForm" onsubmit="submitForm(event)">
+  <div class="error">Ошибки {{ errors }}</div>
+  <form @submit.prevent="submitForm">
     <h3>Создание клиента</h3>
     <div>
       <label for="fullname">Full Name:</label>
-      <input type="text" id="fullname" name="fullname" required minlength="5">
-      <div id="fullnameError" class="error"></div>
+      <input type="text" id="fullname" name="fullname" v-model="fullname">
     </div>
     <div>
       <label for="phone">Phone:</label>
-      <input type="tel" id="phone" name="phone" required pattern="[0-9]+">
-      <div id="phoneError" class="error"></div>
+      <input type="tel" id="phone" name="phone" v-model="phone">
     </div>
     <div>
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <div id="emailError" class="error"></div>
+      <input type="email" id="email" name="email" v-model="email">
     </div>
     <button type="submit">Submit</button>
   </form>
 </template>
 
 <script>
-function submitForm(event) {
-  event.preventDefault();
-  const fullname = document.getElementById('fullname').value;
-  const phone = document.getElementById('phone').value;
-  const email = document.getElementById('email').value;
+export default {
+  data() {
+    return {
+      fullname: "",
+      phone: "",
+      email: "",
+      errors: []
+    };
+  },
+  methods: {
+    submitForm() {
+      this.fullnameError = "";
+      this.phoneError = "";
+      this.emailError = "";
+      this.errors = []
 
-  const fullnameError = document.getElementById('fullnameError');
-  fullnameError.textContent = '';
+      if (this.fullname.length < 5) {
+        this.fullnameError = "Full name should have at least 5 characters";
+        this.errors.push(this.fullnameError)
+      }
 
-  const phoneError = document.getElementById('phoneError');
-  phoneError.textContent = '';
+      if (!this.phone.match(/^\d+$/)) {
+        this.phoneError = "Phone should only contain digits";
+        this.errors.push(this.phoneError)
+      }
 
-  const emailError = document.getElementById('emailError');
-  emailError.textContent = '';
-
-  if (fullname.length < 5) {
-    fullnameError.textContent = 'Full name should have at least 5 characters';
+      if (!this.email.match(/^[\w-]+(\.[\w-]+)*@([a-z0-9-]+\.)+[a-z]{2,}$/i)) {
+        this.emailError = "Invalid email format";
+        this.errors.push(this.emailError)
+      }
+    }
   }
-
-  if (!phone.match(/^\d+$/)) {
-    phoneError.textContent = 'Phone should only contain digits';
-  }
-
-  if (!email.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
-    emailError.textContent = 'Invalid email format';
-  }
-
-  if (!fullnameError.textContent && !phoneError.textContent && !emailError.textContent) {
-    console.log('Form submitted successfully');
-  }
-}
+};
 </script>
 
 <style>
+.error {
+  color: red;
+}
 </style>
-

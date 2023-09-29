@@ -3,18 +3,13 @@
   <div>
     <Dashboard/>
   </div>
-
 </template>
 <script>
   import Navbar from "./components/navbar.vue";
   import Dashboard from "./components/dashboard.vue";
-  export default {
-    name: 'Staff',
-    components: {Navbar, Dashboard},
-    data () {
-      return {
-        message: "Test Message!!!"
-      }
-    }
-  }
+  import {defineComponent} from "vue";
+
+  export default defineComponent({
+    components: {Navbar, Dashboard}
+  })
 </script>
