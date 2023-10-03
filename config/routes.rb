@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  Rails.application.routes.default_url_options[:host] = 'XXX'
+
   devise_for :staffs, path: :staffs, path_names: { sign_in: :login, sign_out: :logout, sign_up: :signup }
   devise_for :users, path: :users, path_names: { sign_in: :login, sign_out: :logout, sign_up: :signup }
 
@@ -6,5 +8,9 @@ Rails.application.routes.draw do
 
   namespace :staff do
     resources :home
+  end
+
+  namespace :api do
+    resources :users
   end
 end
