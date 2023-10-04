@@ -35,12 +35,17 @@ gem 'devise'
 
 gem 'devise-jwt'
 
+gem 'blueprinter'
+
+gem 'oj'
+
 # gem "sassc-rails"
 
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'factory_bot_rails'
 end
 
 group :development do
@@ -50,6 +55,8 @@ group :development do
 
   # gem "spring"
 
+  gem 'rspec-rails', '~> 5.0.0'
+
   gem 'letter_opener'
 end
 
@@ -58,4 +65,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'database_cleaner-active_record'
+  gem 'rails-controller-testing'
+  gem 'shoulda-matchers'
 end

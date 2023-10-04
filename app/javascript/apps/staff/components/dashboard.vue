@@ -1,4 +1,7 @@
 <template>
+  <li v-for="user in users">
+    {{ user.email }}
+  </li>
   <div v-if="errors.length > 0" class="error">Errors {{ errors }}</div>
   <form @submit.prevent="submitForm">
     <h3>Создание клиента</h3>
@@ -14,6 +17,10 @@
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" v-model="email">
     </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" v-model="password">
+    </div>
     <button type="submit">Submit</button>
   </form>
 </template>
@@ -26,24 +33,31 @@ export default {
       fullname: "",
       phone: "",
       email: "",
-      errors: []
+      password: "",
+      errors: [],
+      users: []
     };
+  },
+  created() {
+    this.$api.users
+        .index()
+        .then((response) => this.users = response.data)
+        .catch((error) => console.log('it is error'))
   },
   methods: {
     submitForm() {
       this.errors = []
 
-      if (this.fullname.length < 5) {
-        this.errors.push("Full name should have at least 5 characters")
-      }
+      const user = { user: { fullname: this.fullname, email: this.email, phone: this.phone, password: this.password} }
 
-      if (!this.phone.match(/^\d+$/)) {
-        this.errors.push("Phone should only contain digits")
-      }
-
-      if (!this.email.match(/^[\w-]+(\.[\w-]+)*@([a-z0-9-]+\.)+[a-z]{2,}$/i)) {
-        this.errors.push("Invalid email format")
-      }
+      this.$api.users
+          .create(user)
+          .then((response) => {
+            this.users.push(response.data)
+          })
+          .catch((error) => {
+            this.errors.push(error.response.data.errors)
+          })
     }
   }
 };
