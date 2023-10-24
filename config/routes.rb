@@ -10,7 +10,12 @@ Rails.application.routes.draw do
     resources :home
   end
 
+  namespace :user do
+    resources :organizations
+  end
+
   namespace :api do
     resources :users
+    resources :organizations
   end
 end
