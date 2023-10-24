@@ -16,7 +16,7 @@ export default {
 
 <style>
 .app-name {
-  color: blue;
+  color: white;
   font-weight: bold;
   font-size: 50px;
 }
