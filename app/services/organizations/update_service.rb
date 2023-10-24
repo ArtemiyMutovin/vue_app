@@ -1,8 +1,8 @@
 class Organizations::UpdateService
   attr_reader :organization
 
-  def initialize(org_id, params)
-    @org_id = org_id
+  def initialize(organization, params)
+    @organization = organization
     @params = params
   end
 
@@ -14,6 +14,6 @@ class Organizations::UpdateService
   private
 
   def update_organization
-    @organization = Organization.update!(id: @org_id, params: @params)
+    @organization.update(@params)
   end
 end

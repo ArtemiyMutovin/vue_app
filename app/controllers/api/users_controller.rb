@@ -9,7 +9,6 @@ class Api::UsersController < ApplicationController
 
     if result.user.persisted?
       render json: UserSerializer.render_as_json(result.user), status: :created
-      flash[:notice] = 'User was succesfully created'
     else
       render json: { errors: result.user.errors.messages }, status: :unprocessable_entity
     end

@@ -1,4 +1,5 @@
 class Api::OrganizationsController < ApplicationController
+  before_action :organization, only: %i[destroy update]
   def index
     render json: OrganizationSerializer.render_as_json(Organization.all)
   end
@@ -14,10 +15,10 @@ class Api::OrganizationsController < ApplicationController
   end
 
   def update
-    result = Organizations::UpdateService.call(organization: organization, params:organization_params)
+    result = Organizations::UpdateService.new(organization, organization_params).call
 
-    if result.organization.persisted?
-      render json: OrganizationSerializer.render_as_json(result.organization), status: :created
+    if result.organization.errors.empty?
+      render json: OrganizationSerializer.render_as_json(result.organization), status: :ok
     else
       render json: { errors: result.organization.errors.messages }, status: :unprocessable_entity
     end
@@ -31,7 +32,7 @@ class Api::OrganizationsController < ApplicationController
   private
 
   def organization
-    @organization ||= Organization.find_by(id: params[:id])
+    @organization ||= Organization.find(params[:id])
   end
 
   def organization_params

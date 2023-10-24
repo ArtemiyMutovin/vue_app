@@ -1,5 +1,4 @@
 <template>
-  <div v-if="userCreated === true" class="success">User successfully created!</div>
   <v-table theme="dark">
     <thead>
     <tr>
@@ -71,6 +70,7 @@
       <td>
         <v-btn
             color="success"
+            @click="editOrg(item)"
         >
           Edit
           <v-dialog
@@ -78,7 +78,15 @@
               activator="parent"
               width="auto"
           >
-            <orgForm/>
+            <orgForm :organization="item"></orgForm>
+            <v-btn
+                color="error"
+                block
+                @click="dialogEditOrg = false"
+            >
+              Close
+
+            </v-btn>
           </v-dialog>
         </v-btn>
       </td>
@@ -124,6 +132,14 @@
           width="auto"
       >
         <orgForm/>
+        <v-btn
+            color="error"
+            block
+            @click="dialogOrg = false"
+        >
+          Close
+
+        </v-btn>
       </v-dialog>
     </v-btn>
   </div>
@@ -142,17 +158,8 @@ export default {
       dialogOrg: false,
       dialogEditOrg: false,
       dialogEditUser: false,
-      fullname: "",
-      phone: "",
-      email: "",
-      password: "",
       users: [],
-      organizations: [],
-      name: "",
-      org_type: "",
-      inn: "",
-      ogrn: "",
-      userCreated: false
+      organizations: []
     }
   },
 
@@ -205,7 +212,7 @@ export default {
     },
     editOrg(organization) {
       this.$api.organizations
-          .update(organization.id, organization)
+          .update(organization.id, { organization: organization })
           .then(() => {
             const index = this.organizations.findIndex(o => o.id === organization.id);
             if (index !== -1) {

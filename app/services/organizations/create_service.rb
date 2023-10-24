@@ -14,6 +14,6 @@ class Organizations::CreateService
   private
 
   def create_organization
-    @organization = Organization.create!(@params)
+    @organization = Organization.create(@params)
   end
 end

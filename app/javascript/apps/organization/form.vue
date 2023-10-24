@@ -2,38 +2,43 @@
   <div>
     <v-card>
       <v-card>
+        <div v-if="createdOrg === true" class="success">Organization successfully created!</div>
         <div v-if="errors.length > 0" class="error">Errors {{ errors }}</div>
         <form @submit.prevent="submitOrgForm">
           <h3>Форма организации</h3>
           <div>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" v-model="name">
+            <input type="text" v-model="organization.name">
           </div>
           <div>
             <label for="org_type">Organization Type:</label>
-            <input type="org_type" id="org_type" name="org_type" v-model="org_type">
+            <input type="org_type" v-model="organization.org_type">
           </div>
           <div>
             <label for="inn">INN:</label>
-            <input type="inn" id="inn" name="inn" v-model="inn">
+            <input type="inn" v-model="organization.inn">
           </div>
           <div>
             <label for="ogrn">OGRN:</label>
-            <input type="ogrn" id="ogrn" name="ogrn" v-model="ogrn">
+            <input type="ogrn" v-model="organization.ogrn">
           </div>
-          <button type="submit">Submit</button>
+          <v-btn
+              type="submit"
+              color="success"
+              block
+              @click="dialogOrg = false"
+          >
+            Submit
+          </v-btn>
         </form>
       </v-card>
-      <v-card-actions>
-        <v-btn color="primary" block @click="dialogOrg">Close</v-btn>
-      </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script>
 export default {
-  name: "userForm",
+  name: "orgForm",
   data() {
     return {
       dialogOrg: false,
@@ -42,23 +47,55 @@ export default {
       inn: "",
       ogrn: "",
       errors: [],
-      organizations: []
+      organizations: [],
+      createdOrg: false
     }
   },
+  props: {
+    organization: {
+      type: Object,
+      default: {}
+    }
+  },
+
   methods: {
     submitOrgForm() {
       this.errors = []
 
-      const organization = {organization: {name: this.name, org_type: this.org_type, inn: this.inn, ogrn: this.ogrn}}
+      const serializedOrg = {
+        organization: {
+          name: this.organization.name,
+          org_type: this.organization.org_type,
+          inn: this.organization.inn,
+          ogrn: this.organization.ogrn
+        }
+      }
 
-      this.$api.organizations
-          .create(organization)
-          .then((response) => {
-            this.organizations.push(response.data)
-          })
-          .catch((error) => {
-            this.errors.push(error.response.data.errors)
-          });
+      if (this.organization.id) {
+
+        this.$api.organizations
+            .update(this.organization.id, serializedOrg)
+            .then((response) => {
+              const index = this.organizations.findIndex((o) => o.id === this.organization.id)
+              if (index !== -1) {
+                this.organizations.splice(index, 1, response.data)
+              }
+            })
+            .catch((error) => {
+              this.errors.push(error.response.data.errors)
+            })
+      } else {
+
+        this.$api.organizations
+            .create(serializedOrg)
+            .then((response) => {
+              this.organizations.push(response.data)
+              this.createdOrg = true
+            })
+            .catch((error) => {
+              this.errors.push(error.response.data.errors)
+            });
+      }
     }
   }
 };

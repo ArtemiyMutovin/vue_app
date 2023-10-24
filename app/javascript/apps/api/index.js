@@ -11,6 +11,7 @@ export default {
     organizations: {
         index: () => axios.get("/api/organizations"),
         create: (data) => axios.post("/api/organizations", data),
+        destroy: (id) => axios.delete(`/api/organizations/${id}`),
         update: (id, data) => axios.patch(`/api/organizations/${id}`, data),
     }
 }
