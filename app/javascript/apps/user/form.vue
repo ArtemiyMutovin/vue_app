@@ -21,6 +21,16 @@
             <label for="password">Password:</label>
             <input type="password" v-model="user.password">
           </div>
+          <v-card
+              class="mx-auto"
+              max-width="300"
+          >
+            Organizations:
+            <v-list
+                :items="organizationsData"
+                item-title="name"
+            ></v-list>
+          </v-card>
           <v-btn
               type="submit"
               color="success"
@@ -35,6 +45,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "userForm",
   data() {
@@ -42,6 +54,7 @@ export default {
       dialogUser: false,
       errors: [],
       users: [],
+      organizationsData: [],
       created: false
     }
   },
@@ -49,13 +62,33 @@ export default {
     user: {
       type: Object,
       default: {}
-    }
+    },
+    organizations: {
+      type: Array,
+      default: () => [],
+    },
   },
+
+  mounted() {
+    this.fetchOrganizationsData();
+  },
+
   methods: {
+      fetchOrganizationsData() {
+        axios.get('/api/organizations')
+            .then(response => {
+              this.organizationsData = response.data;
+            })
+            .catch(error => {
+              console.error(error);
+            });
+    },
+
     submitUserForm() {
       this.errors = []
 
-      const serializedUser = { user: {email: this.user.email,
+      const serializedUser =
+          { user: {email: this.user.email,
           fullname: this.user.fullname,
           phone: this.user.phone,
           password: this.user.password}}
