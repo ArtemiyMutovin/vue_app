@@ -21,15 +21,31 @@
             <label for="password">Password:</label>
             <input type="password" v-model="user.password">
           </div>
-          <v-card
-              class="mx-auto"
-              max-width="300"
-          >
-            Organizations:
-            <v-list
-                :items="organizationsData"
-                item-title="name"
-            ></v-list>
+          <v-card class="mx-auto" max-width="300">
+            <strong>Organizations:</strong>
+            <v-list>
+              <v-list-item v-for="org in organizationsData" :key="org.id">
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-checkbox-btn
+                        :model-value="isChecked(org)"
+                        color="blue"
+                        @input:model-value="handleCheckboxChange($event, org)"
+                    >
+                      <template #label>
+                        <v-chip
+                            variant="elevated"
+                            label
+                            color="amber-accent-4"
+                        >
+                          {{ org.name }}
+                        </v-chip>
+                      </template>
+                    </v-checkbox-btn>
+                  </v-list-item-action>
+                </template>
+              </v-list-item>
+            </v-list>
           </v-card>
           <v-btn
               type="submit"
@@ -55,6 +71,7 @@ export default {
       errors: [],
       users: [],
       organizationsData: [],
+      selected: [],
       created: false
     }
   },
@@ -82,6 +99,24 @@ export default {
             .catch(error => {
               console.error(error);
             });
+    },
+
+    isChecked(item) {
+      if (!this.selected) return false;
+      return this.selected.some(
+          (selected) => selected.target_id === item.target_id,
+      );
+    },
+    handleCheckboxChange(checked, item) {
+      if (checked) {
+        const updatedSelected = [...this.selected, item];
+        this.$emit("update:selected", updatedSelected);
+      } else {
+        const updatedSelected = this.selected.filter(
+            (selected) => selected.target_id !== item.target_id,
+        );
+        this.$emit("update:selected", updatedSelected);
+      }
     },
 
     submitUserForm() {
