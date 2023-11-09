@@ -30,7 +30,7 @@
                     <v-checkbox-btn
                         :model-value="isChecked(org)"
                         color="blue"
-                        @input:model-value="handleCheckboxChange($event, org)"
+                        @change="handleCheckboxChange($event, org)"
                     >
                       <template #label>
                         <v-chip
@@ -95,6 +95,7 @@ export default {
         axios.get('/api/organizations')
             .then(response => {
               this.organizationsData = response.data;
+              console.log(this.organizationsData);
             })
             .catch(error => {
               console.error(error);
@@ -104,18 +105,14 @@ export default {
     isChecked(item) {
       if (!this.selected) return false;
       return this.selected.some(
-          (selected) => selected.target_id === item.target_id,
+          (selected) => selected.id === item.id,
       );
     },
-    handleCheckboxChange(checked, item) {
-      if (checked) {
-        const updatedSelected = [...this.selected, item];
-        this.$emit("update:selected", updatedSelected);
+    handleCheckboxChange(event, item) {
+      if (event.target.checked) {
+        this.selected.push(item);
       } else {
-        const updatedSelected = this.selected.filter(
-            (selected) => selected.target_id !== item.target_id,
-        );
-        this.$emit("update:selected", updatedSelected);
+        this.selected = this.selected.filter((org) => org.id !== item.id);
       }
     },
 
@@ -126,7 +123,8 @@ export default {
           { user: {email: this.user.email,
           fullname: this.user.fullname,
           phone: this.user.phone,
-          password: this.user.password}}
+          password: this.user.password,
+          organizations: this.selected}}
 
       if (this.user.id) {
 
