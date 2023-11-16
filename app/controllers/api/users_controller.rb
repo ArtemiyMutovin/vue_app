@@ -15,7 +15,7 @@ class Api::UsersController < ApplicationController
   end
 
   def update
-    result = Users::UpdateService.new(user, user_params).call
+    result = Users::UpdateService.new(**update_user_params).call
 
     if result.user.errors.empty?
       render json: UserSerializer.render_as_json(result.user), status: :ok
@@ -30,11 +30,23 @@ class Api::UsersController < ApplicationController
 
   private
 
+  def update_user_params
+    {
+      user: user,
+      params: user_params.to_h,
+      organizations: organizations_params
+    }
+  end
+
   def user
     @user ||= User.find(params[:id])
   end
 
   def user_params
     params.require(:user).permit(:fullname, :email, :phone, :password)
+  end
+
+  def organizations_params
+    params.permit(organizations: %i[id]).to_h.fetch('organizations', [])
   end
 end

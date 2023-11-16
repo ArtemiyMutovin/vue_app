@@ -21,6 +21,32 @@
             <label for="password">Password:</label>
             <input type="password" v-model="user.password">
           </div>
+          <v-card class="mx-auto" max-width="300">
+            <strong>Organizations:</strong>
+            <v-list>
+              <v-list-item v-for="org in organizationsData" :key="org.id">
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-checkbox-btn
+                        :model-value="isChecked(org)"
+                        color="blue"
+                        @change="handleCheckboxChange($event, org)"
+                    >
+                      <template #label>
+                        <v-chip
+                            variant="elevated"
+                            label
+                            color="amber-accent-4"
+                        >
+                          {{ org.name }}
+                        </v-chip>
+                      </template>
+                    </v-checkbox-btn>
+                  </v-list-item-action>
+                </template>
+              </v-list-item>
+            </v-list>
+          </v-card>
           <v-btn
               type="submit"
               color="success"
@@ -35,6 +61,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "userForm",
   data() {
@@ -42,6 +70,8 @@ export default {
       dialogUser: false,
       errors: [],
       users: [],
+      organizationsData: [],
+      selected: [],
       created: false
     }
   },
@@ -49,16 +79,56 @@ export default {
     user: {
       type: Object,
       default: {}
-    }
+    },
+    organizations: {
+      type: Array,
+      default: () => [],
+    },
   },
+
+  mounted() {
+    this.fetchOrganizationsData();
+  },
+
   methods: {
+      fetchOrganizationsData() {
+        axios.get('/api/organizations')
+            .then(response => {
+              this.organizationsData = response.data;
+              console.log(this.organizationsData);
+            })
+            .catch(error => {
+              console.error(error);
+            });
+    },
+
+    isChecked(item) {
+      if (!this.selected) return false;
+      return this.selected.some(
+          (selected) => selected.id === item.id,
+      );
+    },
+    handleCheckboxChange(event, item) {
+      if (event.target.checked) {
+        this.selected.push(item);
+      } else {
+        this.selected = this.selected.filter((org) => org.id !== item.id);
+      }
+    },
+
     submitUserForm() {
       this.errors = []
 
-      const serializedUser = { user: {email: this.user.email,
-          fullname: this.user.fullname,
-          phone: this.user.phone,
-          password: this.user.password}}
+      const serializedUser =
+          { user:
+                {
+                  email: this.user.email,
+                  fullname: this.user.fullname,
+                  phone: this.user.phone,
+                  password: this.user.password
+                },
+            organizations: this.selected
+          }
 
       if (this.user.id) {
 
