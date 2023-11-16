@@ -120,11 +120,15 @@ export default {
       this.errors = []
 
       const serializedUser =
-          { user: {email: this.user.email,
-          fullname: this.user.fullname,
-          phone: this.user.phone,
-          password: this.user.password,
-          organizations: this.selected}}
+          { user:
+                {
+                  email: this.user.email,
+                  fullname: this.user.fullname,
+                  phone: this.user.phone,
+                  password: this.user.password
+                },
+            organizations: this.selected
+          }
 
       if (this.user.id) {
 

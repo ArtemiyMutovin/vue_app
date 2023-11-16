@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Users::UpdateService do
-  subject(:service) { described_class.new(user, user_params).call }
+  subject(:service) { described_class.new(user: user, params: user_params, organizations: [organization]).call }
 
   let!(:user) { create(:user) }
+  let!(:organization) { create(:organization) }
+
   let(:user_params) do
     {
       email: 'newuser@mail.com'
